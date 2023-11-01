@@ -3,15 +3,8 @@
 This system of plant monitor can achieve the goals of measuring soil moisture and the surrounding air environment by sensors. Data can be displayed on webserver. And then, the data will be transferred through WIFI to an MQTT server and the data will be stored in a database. The data includes the surrounding temperature and humidity of the plant and the moisture of the soil. This document is a brief process to build the plant monitor system.
 
 ## 1. Preparations:
-Arduino IDE, MQTT Explorer
-### Libraries
-The libraries are used for the Arduino IDE
-* **ESP8266WiFi**
-* **ESP8266WebServer**
-* **ezTime**
-* **DHT**
-* **DHT_U**
-* **PubSubClient**
+* **Arduino IDE**
+* **MQTT Explorer**
 ### Physical items:
 * **Copper wire**
 * **Solder wire**
@@ -34,14 +27,22 @@ The libraries are used for the Arduino IDE
 
 ## 2. Process
 ### 2.1 Feather Set-up
-Download the driver follow by [guildline](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers)
+Download the driver in [Guildline](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
 ### 2.2 Soldering
 Four resistors are required to be soldered on the circuit board. The nails should be wrapped tightly with copper wire and solder the wire to the board. Also DHT22 Sensor is required to be soldered as well.
 
 ### 2.3 Arduino IDE Set-up
-Create a `.h` file to store the WIFI name, WIFI password, MQTT-server Username, MQTT-server User password
+Create a `.h` file to store the WIFI name, WIFI password, MQTT-server Username, MQTT-server User password.
 Use the PubSubClient library to  connect to the MQTT server.
 Scripting through the DHT and DHT_U libraries, and the use of assembled components to accomplish the sensing of soil moisture as well as the the surrounding temperature and humidity of the plant.
+
+#### Libraries
+* **ESP8266WiFi**
+* **ESP8266WebServer**
+* **ezTime**
+* **DHT**
+* **DHT_U**
+* **PubSubClient**
 
 ### 2.4 Raspberry Pi Set-up
 #### 2.4.1 RPi
