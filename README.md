@@ -30,6 +30,8 @@ Download the driver in [Guildline](https://www.silabs.com/developers/usb-to-uart
 ### 2.2 Soldering
 Four resistors are required to be soldered on the circuit board. The nails should be wrapped tightly with copper wire and solder the wire to the board. Also DHT22 Sensor is required to be soldered as well.
 
+This is the example after Soldering.
+![After Soldering](https://github.com/Hypersaki/Plant-Monitor/blob/main/device%20build/soldering_example.jpg "soldering_example.jpg")
 ### 2.3 Arduino IDE Set-up
 Create a `.h` file to store the WIFI name, WIFI password, MQTT-server Username, MQTT-server User password.
 Use the PubSubClient library to  connect to the MQTT server.
@@ -41,7 +43,7 @@ Scripting through the DHT and DHT_U libraries, and the use of assembled componen
 * **ezTime**[Source](https://github.com/ropg/ezTime)
 * **DHT**[Source](https://github.com/adafruit/DHT-sensor-library/blob/master/DHT.h)
 * **DHT_U**[Source](https://github.com/adafruit/DHT-sensor-library/blob/master/DHT_U.h)
-* **PubSubClient**][Source](https://www.arduino.cc/reference/en/libraries/pubsubclient/)
+* **PubSubClient**[Source](https://www.arduino.cc/reference/en/libraries/pubsubclient/)
 
 ### 2.4 Raspberry Pi Set-up
 #### 2.4.1 RPi
@@ -123,3 +125,6 @@ Using the if-else control flow statements to evaluate conditions and transmit en
     client.publish("student/CASA0014/plant/ucfniad/temperature_status", "The current temperature is at the ideal temperature.");
 ```
 The code needs to be added inside the sendMQTT function. For more information, please refer to the [DHT22_MQTT with nails](https://github.com/Hypersaki/Plant-Monitor/blob/main/DHT22_MQTT%20with%20nails/DHT22_MQTT%20with%20nails.ino)
+### 3 Plant Monitor Device Working
+The device working with a power bank.
+![device&plant_v2](https://github.com/Hypersaki/Plant-Monitor/blob/main/device%20build/device&plant_v2.jpg "device&plant_v2.jpg")
