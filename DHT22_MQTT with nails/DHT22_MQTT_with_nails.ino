@@ -1,18 +1,16 @@
-
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ezTime.h>
 #include <PubSubClient.h>
 #include <DHT.h>
 #include <DHT_U.h>
-
-// #define DHTTYPE DHT22   // Define the DHT sensor type as DHT22 (AM2302) or AM2321
-// #define temp_min 20 //Define the ideal minimum temperature of a certain plant
-// #define temp_max 30 //Define the ideal maximum temperature of a certain plant
-// #define percentage_h_low 60 //Define the ideal minimum humidity of a certain plant
-// #define percentage_h_high 90 //Define the idea maximum humidity of a certain plant
-// #define percentage_m_min 30 //Define the ideal minimum moisture moisture of a certain plant
-// #define percentage_m_max 60 //Define the ideal maximum moisture moisture of a certain plant
+#define DHTTYPE DHT22   // Define the DHT sensor type as DHT22 (AM2302) or AM2321
+#define temp_min 20 //Define the ideal minimum temperature of a certain plant
+#define temp_max 30 //Define the ideal maximum temperature of a certain plant
+#define percentage_h_low 60 //Define the ideal minimum humidity of a certain plant
+#define percentage_h_high 90 //Define the idea maximum humidity of a certain plant
+#define m_min 30 //Define the ideal minimum moisture moisture of a certain plant
+#define m_max 60 //Define the ideal maximum moisture moisture of a certain plant
 
 // can be used if additional content is added
 
@@ -143,11 +141,40 @@ void sendMQTT() {//MQTT server reconnect method
   Serial.println(msg);
   client.publish("student/CASA0014/plant/ucfniad/temperature", msg); //data publish path
 
+  float temp_low = temp_min;
+  float temp_high = temp_max;
+  bool temperaturel0 = (Temperature < temp_low);
+  bool temperatureh1 = (Temperature > temp_high);
+  //declare variables
+
+  if (temperaturel0) {
+    client.publish("student/CASA0014/plant/ucfniad/temperature_status", "The current temperature is lower than ideal.");
+  } else if (temperatureh1) {
+    client.publish("student/CASA0014/plant/ucfniad/temperature_status", "The current temperature is higher than ideal.");
+  } else {
+    client.publish("student/CASA0014/plant/ucfniad/temperature_status", "The current temperature is at the ideal temperature.");
+  }//send message to show whether the temperature is (relatively high/low) or (ideal)
+
+
   Humidity = dht.readHumidity(); //humidity(percentage)
   snprintf (msg, 50, "%.0f", Humidity); //data format
   Serial.print("Publish message for h: ");
   Serial.println(msg);
   client.publish("student/CASA0014/plant/ucfniad/humidity", msg); //data publish path
+
+  float h_low = percentage_h_min;
+  float h_high = percentage_h_max;
+  bool humidityl0 = (Humidity < h_low);
+  bool humidityh1 = (Humidity > h_high);
+  //declare variables and conditions
+
+  if (humidityl0) {
+    client.publish("student/CASA0014/plant/ucfniad/humidity_status", "The current humidity is lower than ideal.");
+  } else if (humidityh1) {
+    client.publish("student/CASA0014/plant/ucfniad/humidity_status", "The current humidity is higher than ideal.");
+  } else {
+    client.publish("student/CASA0014/plant/ucfniad/humidity_status", "The current humidity is at the ideal humidity.");
+  }//send message to show whether the humidity is (relatively high/low) or (ideal)
 
   //Moisture = analogRead(soilPin);   // moisture read by readMoisture()
   snprintf (msg, 50, "%.0i", Moisture); //data format
@@ -155,14 +182,20 @@ void sendMQTT() {//MQTT server reconnect method
   Serial.println(msg);
   client.publish("student/CASA0014/plant/ucfniad/moisture", msg); //data publish path
 
-  //  if (t < temp_min) {
-  //     ;
-  //   } else if (t >= temp_max && t <= temp_max) {
-  //     ;
-  //   } else {
-  //     ;
-  //   }
-  
+
+  float m_low = m_min;
+  float m_high = m_max;
+  bool moisturel0 = (Moisture < h_low);
+  bool moistureh1 = (Moisture > h_high);
+  //declare variables and conditions
+
+  if (moisturel0) {
+    client.publish("student/CASA0014/plant/ucfniad/moisture_status", "The current moisture is lower than ideal.");
+  } else if (moistureh1) {
+    client.publish("student/CASA0014/plant/ucfniad/moisture_status", "The current moisture is higher than ideal.");
+  } else {
+    client.publish("student/CASA0014/plant/ucfniad/moisture_status", "The current moisture is at the ideal moisture.");
+  }//send message to show whether the moisture is (relatively high/low) or (ideal)
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -221,7 +254,7 @@ void handle_OnConnect() { //dht22
 }
 
 void handle_NotFound() {
-  server.send(404, "text/plain", "Not found"); //if not found, display 404 error 
+  server.send(404, "text/plain", "Not found"); //if not found, send a 404 error 
 }
 
 String SendHTML(float Temperaturestat, float Humiditystat, int Moisturestat) {
